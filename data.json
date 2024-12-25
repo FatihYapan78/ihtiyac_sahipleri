@@ -1,0 +1,17 @@
+[
+    {
+      "adSoyad": "Ahmet Yılmaz",
+      "tc": "12345678901",
+      "telefon": "05555555555",
+      "adres": "İstanbul, Kadıköy",
+      "yapilanYardimlar": ["Gıda Kolisi", "Kira Yardımı"]
+    },
+    {
+      "adSoyad": "Ayşe Demir",
+      "tc": "23456789012",
+      "telefon": "05444444444",
+      "adres": "Ankara, Çankaya",
+      "yapilanYardimlar": ["Kıyafet Yardımı", "Eğitim Desteği"]
+    }
+  ]
+  
