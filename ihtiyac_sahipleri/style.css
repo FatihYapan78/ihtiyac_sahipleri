@@ -1,0 +1,75 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  input[type="text"] {
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    table-layout: fixed; /* Sütunlar arasındaki genişliği sabit tutar */
+  }
+  
+  table, th, td {
+    border: 1px solid #ddd;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: left;
+    word-wrap: break-word; /* Kelimelerin taşmasını önler */
+  }
+  
+  th {
+    background-color: #f4f4f4;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  /* Mobil cihazlar için stil */
+  @media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+      display: block; /* Tabloyu blok düzenine çevirir */
+    }
+  
+    thead tr {
+      display: none; /* Tablo başlıklarını gizler */
+    }
+  
+    tr {
+      margin-bottom: 15px; /* Satırlar arasında boşluk bırakır */
+    }
+  
+    td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 5px;
+      border: 1px solid #ddd;
+      position: relative;
+    }
+  
+    td::before {
+      content: attr(data-label); /* Her hücreye başlık bilgisini ekler */
+      font-weight: bold;
+      width: 50%;
+      display: inline-block;
+      text-align: left;
+    }
+  }
+  
