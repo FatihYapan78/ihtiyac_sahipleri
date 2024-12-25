@@ -1,31 +1,39 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yardım Listesi</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yardım Listesi</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>İhtiyaç Sahipleri Yardım Listesi</h1>
-
-  <input type="text" id="arama" placeholder="İsimle ara..." onkeyup="filtrele()">
-  
-  <table id="yardimTablosu">
-    <thead>
-      <tr>
-        <th>Ad Soyad</th>
-        <th>TC</th>
-        <th>Telefon</th>
-        <th>Adres</th>
-        <th>Yapılan Yardımlar</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Veri buraya eklenecek -->
-    </tbody>
-  </table>
-
-  <script src="script.js"></script>
+    <h1>Yardım Alan Kişiler</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Adı Soyadı</th>
+                <th>TC Kimlik</th>
+                <th>Telefon</th>
+                <th>Adres</th>
+                <th>Yapılan Yardım</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Ahmet Yılmaz</td>
+                <td>12345678901</td>
+                <td>05012345678</td>
+                <td>İstanbul, Kadıköy</td>
+                <td>Gıda Yardımı</td>
+            </tr>
+            <tr>
+                <td>Ayşe Demir</td>
+                <td>10987654321</td>
+                <td>05098765432</td>
+                <td>İzmir, Konak</td>
+                <td>Giyim Yardımı</td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>
