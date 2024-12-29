@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İhtiyaç Sahibi Detay</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>İhtiyaç Sahibi Detayları</h1>
+        
+        <!-- Kişi Bilgileri -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title" id="kisiAdi"></h3>
+            </div>
+            <div class="card-body">
+                <div id="kisiBilgileri"></div>
+            </div>
+        </div>
+
+        <!-- Yardım Kayıt Formu -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Yeni Yardım Kaydı</h3>
+            </div>
+            <div class="card-body">
+                <form id="yardimForm">
+                    <div class="mb-3">
+                        <label for="yardimTarihi" class="form-label">Yardım Tarihi</label>
+                        <input type="date" class="form-control" id="yardimTarihi" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="yardimTuru" class="form-label">Yardım Türü</label>
+                        <select class="form-control" id="yardimTuru" required>
+                            <option value="">Seçiniz</option>
+                            <option value="gida">Gıda</option>
+                            <option value="giyim">Giyim</option>
+                            <option value="nakdi">Nakdi Yardım</option>
+                            <option value="diger">Diğer</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="yardimMiktari" class="form-label">Yardım Miktarı/Açıklama</label>
+                        <input type="text" class="form-control" id="yardimMiktari" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="notlar" class="form-label">Notlar</label>
+                        <textarea class="form-control" id="notlar" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Yardım Geçmişi -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Yardım Geçmişi</h3>
+            </div>
+            <div class="card-body">
+                <div id="yardimGecmisi"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // URL'den kişi ID'sini al
+        const urlParams = new URLSearchParams(window.location.search);
+        const kisiId = urlParams.get('id');
+
+        // Kişi bilgilerini yükle
+        async function kisiBilgileriniYukle() {
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                const kisi = data.find(k => k.id === kisiId);
+                
+                if (kisi) {
+                    document.getElementById('kisiAdi').textContent = kisi['ADI-SOYADI'];
+                    
+                    const bilgilerHTML = `
+                        <p><strong>TC/Kimlik No:</strong> ${kisi['TC / YABANCI UYRUK KİMLİK NO']}</p>
+                        <p><strong>Telefon:</strong> ${kisi['TELEFON NUMARASI']}</p>
+                        <p><strong>Adres:</strong> ${kisi['ADRESİ']}</p>
+                        <p><strong>Kayıt Tarihi:</strong> ${kisi['KAYIT TARİHİ']}</p>
+                        <p><strong>Aile Durum Özeti:</strong> ${kisi['AİLE DURUM ÖZETİ']}</p>
+                    `;
+                    document.getElementById('kisiBilgileri').innerHTML = bilgilerHTML;
+                }
+            } catch (error) {
+                console.error('Veri yükleme hatası:', error);
+            }
+        }
+
+        // Yardım formunu işle
+        document.getElementById('yardimForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const yardimKaydi = {
+                kisiId: kisiId,
+                tarih: document.getElementById('yardimTarihi').value,
+                tur: document.getElementById('yardimTuru').value,
+                miktar: document.getElementById('yardimMiktari').value,
+                notlar: document.getElementById('notlar').value
+            };
+
+            try {
+                const response = await fetch('/kaydet-yardim', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(yardimKaydi)
+                });
+
+                if (response.ok) {
+                    alert('Yardım kaydı başarıyla eklendi');
+                    document.getElementById('yardimForm').reset();
+                    yardimGecmisiniYukle();
+                }
+            } catch (error) {
+                console.error('Kayıt hatası:', error);
+                alert('Kayıt sırasında bir hata oluştu');
+            }
+        });
+
+        // Yardım geçmişini yükle
+        async function yardimGecmisiniYukle() {
+            try {
+                const response = await fetch(`/yardim-gecmisi?id=${kisiId}`);
+                const yardimlar = await response.json();
+                
+                const gecmisHTML = yardimlar.length ? yardimlar.map(yardim => `
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h5 class="card-title">${yardim.tarih}</h5>
+                            <p class="card-text">
+                                <strong>Tür:</strong> ${yardim.tur}<br>
+                                <strong>Miktar/Açıklama:</strong> ${yardim.miktar}<br>
+                                <strong>Notlar:</strong> ${yardim.notlar}
+                            </p>
+                        </div>
+                    </div>
+                `).join('') : '<p>Henüz kayıtlı yardım bulunmamaktadır.</p>';
+                
+                document.getElementById('yardimGecmisi').innerHTML = gecmisHTML;
+            } catch (error) {
+                console.error('Yardım geçmişi yükleme hatası:', error);
+            }
+        }
+
+        // Sayfa yüklendiğinde bilgileri göster
+        kisiBilgileriniYukle();
+        yardimGecmisiniYukle();
+    </script>
+</body>
+</html>
